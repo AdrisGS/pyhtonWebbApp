@@ -1,0 +1,72 @@
+{% extends "index.html" %}
+{% block body %}
+<div class="wrap-contact100">
+    <form class="contact100-form validate-form">
+        <div class="rs1-wrap-image">
+            <img class="business-logo" src="{{paymentInfo.business_logo_url}}" alt="{{paymentInfo.payment_amount}}">
+        </div>
+        <div class="rs1-wrap-title ">
+            <span class="business-name">
+                {{paymentInfo.business_name}}
+            </span>
+            <span class="payment-amount">
+            $ {{paymentInfo.payment_amount}} MXN
+            </span>
+            <span class="payment-concept">
+                {{paymentInfo.payment_concept}}
+            </span>
+        </div>
+        <label class="label-card">Número de tarjeta:</label>
+        <div class="wrap-input100 validate-input bg1 space icon-relative" data-validate="Escriba un número de tarjeta valido">
+            <input class="input100" type="tel" minlength="13" maxlength="16" data-mask="0000 0000 0000 0000" placeholder="XXXX XXXX XXXX XXXX" required>
+            <i class="far fa-credit-card"></i>
+        </div>
+
+        <label class="label-card">Nombre en la tarjeta:</label>
+        <div class="wrap-input100 validate-input bg1 space icon-relative" data-validate="Escriba su nombre">
+            <input class="input100" type="text" required>
+            <i class="fas fa-user"></i>
+        </div>
+
+        <div class="rs1-wrap-input100 ">
+            <label class="label-card">Fecha de vencimiento:</label>
+            <div class="wrap-input100 bg1 space icon-relative" data-validate="Escriba una fecha valida">
+                <input class="input100" type="tel" name="expiry-data" data-mask="00/00" placeholder="00/00" required ">
+            <i class="fas fa-calendar-alt "></i>
+            </div>
+        </div>
+
+        <div class="rs1-wrap-input100 ">
+            <label class="label-card ">CVC:</label>
+            <div class="wrap-input100 bg1 space icon-relative ">
+                <input class="input100 " type="text " name="cvc " minlength="3 " maxlength="3 " data-mask="000 " placeholder="000 " required>
+                <i class="fas fa-lock "></i>
+            </div>
+        </div>
+
+        <label class="label-card bg1 rs1-wrap-label-card ">Correo electrónico:</label>
+        <div class="wrap-input100 validate-input bg1 space icon-relative " data-validate="Escriba un correo valido ">
+            <input class="input100 " type="text " name="email " placeholder="correo@ejemplo.ccc ">
+            <i class="fas fa-at "></i>
+        </div>
+
+        <div class="info ">
+            <strong>Su pago será procesado a través de 3D-Secure.</strong>
+            <p>Mantenga la ventana abierta hasta finalizar proceso.</p>
+        </div>
+        
+        <div class="container-contact100-form-btn ">
+            <button class="contact100-form-btn ">
+                <span>
+                    PAGAR
+                </span>
+            </button>
+        </div>
+    </form>
+    <div class="info_secure ">
+        <p>Secure card payment</p>
+        <img class="c3logo " src="{{url_for( 'static', filename='images/footer.png' )}} ">
+    </div>
+</div>
+
+{% endblock %}
