@@ -118,7 +118,6 @@ def get_PaymentInfo(link_id):
   resp.status_code=200
   return resp
 
-
 @app.route('/<link_id>', methods = ['POST', 'GET'])
 def get_paymentLink(link_id):
   conn = database.connect()
