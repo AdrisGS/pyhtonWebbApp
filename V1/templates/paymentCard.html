@@ -39,15 +39,21 @@
         <div class="rs1-wrap-input100 ">
             <label class="label-card ">CVC:</label>
             <div class="wrap-input100 bg1 space icon-relative ">
-                <input class="input100 " type="text " name="cvc " minlength="3 " maxlength="3 " data-mask="000 " placeholder="000 " required>
+                <input class="input100 " type="text " name="cvc" minlength="3 " maxlength="3 " data-mask="000 " placeholder="000 " required>
                 <i class="fas fa-lock "></i>
             </div>
         </div>
 
         <label class="label-card bg1 rs1-wrap-label-card ">Correo electrónico:</label>
         <div class="wrap-input100 validate-input bg1 space icon-relative " data-validate="Escriba un correo valido ">
-            <input class="input100 " type="text " name="email " placeholder="correo@ejemplo.ccc ">
+            <input class="input100 " type="text " name="email" placeholder="correo@ejemplo.ccc ">
             <i class="fas fa-at "></i>
+        </div>
+
+        <label class="label-card bg1 rs1-wrap-label-card ">Número telefónico:</label>
+        <div class="wrap-input100 validate-input bg1 space icon-relative " data-validate="Escriba un correo valido ">
+            <input class="input100 " type="tel " name="phone" placeholder="{{paymentInfo.phone_number}} ">
+            <i class="fas fa-phone "></i>
         </div>
 
         <div class="info ">

@@ -2,7 +2,7 @@
 import time
 import pymysql
 import datetime
-from services.linkShortener import tiny_url
+from services.shortner_url import id_generator
 from flask import Flask, render_template, jsonify, request
 from flaskext.mysql import MySQL
 # from functools import wraps
@@ -49,39 +49,41 @@ def add_paymentInfo():
         business_name = request.form['business_name']
         business_logo_url = request.form['business_logo_url']
         result = "OK"
-        long_url = 'http://127.0.0.1:3000/cccPayment/'+order_id
-        link_url = tiny_url(long_url)
+        link_id = id_generator().url_id(order_id)
+        long_url = 'http://127.0.0.1:3000/cccPayment/'+link_id
+        link_url = 'http://127.0.0.1:3000/cccPayment/'+link_id
         creation_date = datetime.datetime.now()
         conn = database.connect()
         cur = conn.cursor(pymysql.cursors.DictCursor)
-        cur.execute('INSERT INTO infopaymentlink (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s )',
-        (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date))
+        cur.execute('INSERT INTO infopaymentlink (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, link_id, long_url, link_url, creation_date ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+        (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, link_id, long_url, link_url, creation_date))
         conn.commit()
-        return 'Hecho'
+        return get_paymentInfo(order_id)
         # resp = jsonify(rows)
         # resp.status_code=200
         # return resp
 
-@app.route('/paymentJSON', methods=['POST'])
-# @require_appkey
-def add_paymentInfoJSON():
-    if request.method == 'POST':
-        order_id = request.args.get('order_id', '')
-        phone_number = request.args.get('phone_number', '')
-        payment_amount = request.args.get('payment_amount', '')
-        payment_concept = request.args.get('payment_concept', '')
-        business_name = request.args.get('business_name', '')
-        business_logo_url = request.args.get('business_logo_url', '')
-        result = "OK"
-        long_url = 'http://127.0.0.1:3000/cccPayment/'+order_id
-        link_url = tiny_url(long_url)
-        creation_date = datetime.datetime.now()
-        conn = database.connect()
-        cur = conn.cursor(pymysql.cursors.DictCursor)
-        cur.execute('INSERT INTO infopaymentlink (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s )',
-        (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date))
-        conn.commit()
-        return 'Hecho'
+# @app.route('/paymentJSON', methods=['POST'])
+# # @require_appkey
+# def add_paymentInfoJSON():
+#     if request.method == 'POST':
+#         order_id = request.args.get('order_id', '')
+#         phone_number = request.args.get('phone_number', '')
+#         payment_amount = request.args.get('payment_amount', '')
+#         payment_concept = request.args.get('payment_concept', '')
+#         business_name = request.args.get('business_name', '')
+#         business_logo_url = request.args.get('business_logo_url', '')
+#         result = "OK"
+#         long_url = 'http://127.0.0.1:3000/cccPayment/'+order_id
+#         link_url = tiny_url(long_url)
+#         creation_date = datetime.datetime.now()
+#         conn = database.connect()
+#         cur = conn.cursor(pymysql.cursors.DictCursor)
+#         cur.execute('INSERT INTO infopaymentlink (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s )',
+#         (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date))
+#         conn.commit()
+#         get
+#         return 'Hecho'
 
 @app.route('/payment/<order_id>', methods = ['POST', 'GET'])
 def get_paymentInfo(order_id):
@@ -94,7 +96,7 @@ def get_paymentInfo(order_id):
   resp.status_code=200
   return resp
 
-@app.route('/getallInfo', methods = ['POST', 'GET'])
+@app.route('/AllInfo', methods = ['POST', 'GET'])
 def get_allData():
   conn = database.connect()
   cur = conn.cursor(pymysql.cursors.DictCursor)
@@ -105,42 +107,69 @@ def get_allData():
   resp.status_code=200
   return resp
 
-
-@app.route('/cccPayment/<order_id>', methods = ['POST', 'GET'])
-def get_paymentLink(order_id):
+@app.route('/PaymentInfo/<link_id>', methods = ['POST', 'GET'])
+def get_PaymentInfo(link_id):
   conn = database.connect()
   cur = conn.cursor(pymysql.cursors.DictCursor)
-  cur.execute('SELECT phone_number, payment_amount, payment_concept, business_name, business_logo_url FROM infopaymentlink WHERE order_id = %s', (order_id))
+  cur.execute('SELECT * FROM infopaymentlink WHERE link_id = %s', (link_id))
+  rows = cur.fetchall()
+  cur.close()
+  resp = jsonify(rows)
+  resp.status_code=200
+  return resp
+
+
+@app.route('/<link_id>', methods = ['POST', 'GET'])
+def get_paymentLink(link_id):
+  conn = database.connect()
+  cur = conn.cursor(pymysql.cursors.DictCursor)
+  cur.execute('SELECT phone_number, payment_amount, payment_concept, business_name, business_logo_url FROM infopaymentlink WHERE link_id = %s', (link_id))
   rows = cur.fetchall()
   cur.close()
   print (rows[0])
   return render_template('paymentCard.html', paymentInfo = rows[0])
 
-@app.route('/paymentComplete', methods=['POST', 'GET'])
-# @require_appkey
-def add_paymentInfoAndJsonOutput():
-    if request.method == 'POST':
-        order_id = request.form['order_id']
-        phone_number = request.form['phone_number']
-        payment_amount = request.form['payment_amount']
-        payment_concept = request.form['payment_concept']
-        business_name = request.form['business_name']
-        business_logo_url = request.form['business_logo_url']
-        result = "OK"
-        long_url = 'http://127.0.0.1:3000/cccPayment/'+order_id
-        link_url = tiny_url(long_url)
-        creation_date = datetime.datetime.now()
-        conn = database.connect()
-        cur = conn.cursor(pymysql.cursors.DictCursor)
-        cur.execute('INSERT INTO infopaymentlink (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s )',
-        (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date))
-        conn.commit()
-        cur.execute('SELECT result, link_id, link_url, error_code, error_text  FROM infopaymentlink WHERE order_id = %s', (order_id))
-        rows = cur.fetchall()
-        cur.close()
-        resp = jsonify(rows)
-        resp.status_code=200
-        return resp
+@app.route('/paidOut/<link_id>', methods=['POST'])
+def update_paidOut(link_id):
+  if request.method == 'POST':
+      second_phone = request.form['second_phone']
+      paid_out = 1
+      conn = database.connect()
+      cur = conn.cursor(pymysql.cursors.DictCursor)
+      cur.execute("""
+          UPDATE infopaymentlink
+          SET second_phone = %s,
+              paid_out = %s
+          WHERE link_id = %s
+      """, (second_phone, paid_out, link_id))
+      conn.commit()
+      return ok
+
+# @app.route('/paymentComplete', methods=['POST', 'GET'])
+# # @require_appkey
+# def add_paymentInfoAndJsonOutput():
+#     if request.method == 'POST':
+#         order_id = request.form['order_id']
+#         phone_number = request.form['phone_number']
+#         payment_amount = request.form['payment_amount']
+#         payment_concept = request.form['payment_concept']
+#         business_name = request.form['business_name']
+#         business_logo_url = request.form['business_logo_url']
+#         result = "OK"
+#         long_url = 'http://127.0.0.1:3000/cccPayment/'+order_id
+#         link_url = tiny_url(long_url)
+#         creation_date = datetime.datetime.now()
+#         conn = database.connect()
+#         cur = conn.cursor(pymysql.cursors.DictCursor)
+#         cur.execute('INSERT INTO infopaymentlink (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s )',
+#         (order_id, phone_number, payment_amount, payment_concept, business_name, business_logo_url, result, long_url, link_url, creation_date))
+#         conn.commit()
+#         cur.execute('SELECT result, link_id, link_url, error_code, error_text  FROM infopaymentlink WHERE order_id = %s', (order_id))
+#         rows = cur.fetchall()
+#         cur.close()
+#         resp = jsonify(rows)
+#         resp.status_code=200
+#         return resp
 
 if __name__ == '__main__':
     app.run(port = 3000, debug = True)
