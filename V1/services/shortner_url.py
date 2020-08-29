@@ -1,11 +1,8 @@
 import random
 
 class id_generator:
-    # short = id_generator()
     # numero de supuestos registros existentes
-    # id = 10000000000000000000000
     id = random.randrange(100000000000, 10000000000000)
-    # id = random.choice([123123123, 98234816294, 9821391726301826, 12312978643, 347263495345, 12412419759754124, 975192460514346, 97539134086234])
     # Almacena el order_id en como identificador para no tener una url_id duplicado
     order2id = {}
     
@@ -36,4 +33,3 @@ class id_generator:
         return "".join(ret[::-1])
 
 
-# print(short.url_id("sd.com"))

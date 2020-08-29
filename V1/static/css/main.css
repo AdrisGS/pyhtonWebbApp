@@ -291,6 +291,15 @@ iframe {
     justify-content: space-between;
 }
 
+.text-paid {
+    display: block;
+    width: 100%;
+    font-family: Montserrat-Bold;
+    font-size: 35px;
+    color: #333333;
+    text-align: center;
+}
+
 .business-name {
     display: block;
     width: 100%;
@@ -378,6 +387,11 @@ input.input100 {
     height: 40px;
 }
 
+span.input100 {
+    vertical-align: middle;
+    height: 40px;
+}
+
 textarea.input100 {
     min-height: 120px;
     padding-top: 9px;
@@ -390,6 +404,17 @@ textarea.input100 {
 
 .has-val.input100+.focus-input100::before {
     width: 100%;
+}
+
+
+/*------------------------------------------------------------------
+[ Image Paid ]*/
+
+img.paid-ok {
+    width: 70px;
+    height: 70px;
+    margin: 5px auto;
+    display: block;
 }
 
 
