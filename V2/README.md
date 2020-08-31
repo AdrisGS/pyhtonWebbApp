@@ -19,3 +19,9 @@ Install with pip3
 pip3 install -r requirements.txt
 ```
 
+To configure the database path, conekta key, domain address, API execution port among other variables, it is necessary to edit the "environmentVariables" file.
+
+```sh
+~/cccLink/static/***environmentVariables.py***
+```
+
