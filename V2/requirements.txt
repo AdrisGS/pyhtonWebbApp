@@ -1,0 +1,7 @@
+## Base packages
+flask==1.1.2
+pymysql==0.10.0
+flask-mysql==1.5.1
+conekta==2.5.1
+simplejson==3.17.2
+requests==2.24.0
