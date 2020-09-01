@@ -122,10 +122,15 @@ def subscription_create():
       }]
     })
     orden=order_create(request.form['concept'], request.form['amount'], customer.id, request.form['order_id'])
-    return render_template('payment.html', customer_id=customer.id, order_id=orden)
+    error=orden[0:6]
+ 
+    if error == "Error:":
+      return render_template('paymentError.html', customer_id=customer.id, error=orden)
+    else:
+      return render_template('payment.html', customer_id=customer.id, order_id=orden)
 
   except conekta.ConektaError as e:
-    print(e.message)
+    return render_template('customerError.html', customerError=e.message)
 
 def order_create(concept, amount, id, order_id):  
   centesimal=100
@@ -164,9 +169,9 @@ def order_create(concept, amount, id, order_id):
     cur.execute(' UPDATE infopaymentlink SET payment_result_obj = %s WHERE order_id = %s', (payment_result_obj, order_id))
     conn.commit()
     get_paymentInfo(order_id)
+    return order.id
   except conekta.ConektaError as e:
-    print(e.message)
-  return order.id
+    return "Error: "+e.message
 
 @app.route('/CCCpayment/<link_id>', methods = ['POST', 'GET'])
 def get_paymentCCCInfo(link_id):

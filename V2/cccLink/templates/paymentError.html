@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>CCC Pay</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='images/icons/favicon.png')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/iconic/css/material-design-iconic-font.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/animate/animate.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/animsition/css/animsition.min.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/util.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+</head>
+
+<body>
+    <div class="container-contact100">
+        <div class="wrap-contact100">
+            <div>
+                <div align="center">
+                    <img src="{{url_for( 'static', filename='images/icons/ok.png' )}} " width="150px" height="150px">
+                </div>
+                <div align="center">
+                    <span class="text-paid">
+                    ¡Ups!
+                    <br>
+                    Su pago no se realizó con éxito
+                </div>
+                <div align="center">
+                    </span>
+                    <span class="text-paid-info">
+                    ID de cliente: {{customer_id}}
+                    <br>
+                    {{error}}
+                    </span>
+                </div>
+                <div class="info_secure ">
+                    <p>Secure card payment</p>
+                    <img class="c3logo " src="{{url_for( 'static', filename='images/footer.png' )}} ">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--===============================================================================================-->
+    <script src="{{url_for( 'static', filename='vendor/jquery/jquery-3.2.1.min.js' )}} "></script>
+    <!--===============================================================================================-->
+    <script src="{{url_for( 'static', filename='vendor/animsition/js/animsition.min.js' )}} "></script>
+    <!--===============================================================================================-->
+    <script src="{{url_for( 'static', filename='vendor/bootstrap/js/popper.js' )}} "></script>
+    <!--===============================================================================================-->
+    <script src="{{url_for( 'static', filename='vendor/bootstrap/js/bootstrap.min.js' )}} "></script>
+    <!--===============================================================================================-->
+    <script src="{{url_for( 'static', filename='vendor/countdowntime/countdowntime.js' )}} "></script>
+    <!--===============================================================================================-->
+    <script src="{{url_for( 'static', filename='js/main.js' )}} "></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js "></script>
+</body>
+
+</html>
