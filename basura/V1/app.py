@@ -106,27 +106,43 @@ def subscription_create():
   client_cc_last_digits=credit_card[i:total] 
   payment_date = datetime.datetime.now()
   order_id=request.form['order_id']
+  idCliente=request.form['idCliente']
   conn = database.connect()
   cur = conn.cursor(pymysql.cursors.DictCursor)
   cur.execute('UPDATE infopaymentlink SET payment_processor = %s, token = %s, exp_date = %s, not_payed = "False", paid_out = "hidden", cust_phone = %s, cust_email = %s, client_cc_first_digits = %s, client_cc_last_digits = %s, payment_date = %s WHERE order_id = %s',(payment_processor, token, exp_date, cust_phone, cust_email, client_cc_first_digits, client_cc_last_digits, payment_date, order_id))
   conn.commit() 
-  try:
-    customer = conekta.Customer.create({
-      'name': request.form['name'],
-      'email': request.form['cust_email'],
-      "phone": request.form['cust_phone'],
-      'payment_sources': [{
-        'type': 'card',
-        'token_id': request.form['token_id']
-      }]
-    })
-    orden=order_create(request.form['concept'], request.form['amount'], customer.id, request.form['order_id'])
-    return render_template('payment.html', customer_id=customer.id, order_id=orden)
+  if len(idCliente) is 0:
+    try:
+      customer = conekta.Customer.create({
+        'name': request.form['name'],
+        'email': request.form['cust_email'],
+        "phone": request.form['cust_phone'],
+        'payment_sources': [{
+          'type': 'card',
+          'token_id': request.form['token_id']
+        }]
+      })
+      orden=order_create(request.form['concept'], request.form['amount'], customer.id, request.form['order_id'],request.form['token_id'])
+      return render_template('payment.html', customer_id=customer.id, order_id=orden)
 
-  except conekta.ConektaError as e:
-    print(e.message)
+    except conekta.ConektaError as e:
+      print(e.message)
+  else:   
+    try:
+      customer = conekta.Customer.find(idCliente)
+      customer.update({
+        'payment_sources': [{
+          'type': 'card',
+          'token_id': request.form['token_id']
+        }]
+      })
+      orden=order_create(request.form['concept'], request.form['amount'], customer.id, request.form['order_id'],request.form['token_id'])
+      return render_template('payment.html', customer_id=customer.id, order_id=orden)
 
-def order_create(concept, amount, id, order_id):  
+    except conekta.ConektaError as e:
+      print(e.message)
+
+def order_create(concept, amount, id, order_id, token):  
   centesimal=100
   value=int(amount)
   centecimal_value=int(centesimal)
@@ -150,7 +166,8 @@ def order_create(concept, amount, id, order_id):
       },
       "charges": [{
         "payment_method": {
-          "type": "default"
+          "type": "card",
+          "token_id": token
         } 
       }]
     })

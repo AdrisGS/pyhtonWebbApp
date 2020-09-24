@@ -57,6 +57,10 @@
                             {{paymentInfo.payment_concept}}
                         </span>
                     </div>
+                    <label class="label-card d-none">ID de cliente:</label>
+                    <div class="wrap-input100 validate-input bg1 space icon-relative" data-validate="Escriba id de cliente existente">
+                        <input class="input100" type="text"  maxlength="21" name="idCliente" placeholder="XXXXXXXXXXXXXXXXXXXXX">
+                    </div>
                     <label class="label-card">Número de tarjeta:</label>
                     <div class="wrap-input100 validate-input bg1 space icon-relative" data-validate="Escriba un número de tarjeta valido">
                         <input class="input100" type="tel" minlength="13" maxlength="16" name="credit_card" data-mask="0000 0000 0000 0000" minlength="16" maxlength="16" placeholder="XXXX XXXX XXXX XXXX" required data-conekta="card[number]" name="card">
